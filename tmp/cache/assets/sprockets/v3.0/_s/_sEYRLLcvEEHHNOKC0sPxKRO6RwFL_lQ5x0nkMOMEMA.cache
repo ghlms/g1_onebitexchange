@@ -1,0 +1,10 @@
+I"ø(function() {
+  $(document).on('click', '.btn-change-coin', function(event) {
+    var moeda_pre;
+    moeda_pre = $('#target_currency').val();
+    $('#target_currency').val($('#amount').val());
+    $('#amount').val(moeda_pre);
+  });
+
+}).call(this);
+:ET

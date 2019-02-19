@@ -1,0 +1,58 @@
+I"(function() {
+  var calc_bitcoin, invert_coins;
+
+  $(document).on('click', '.btn-change-coin', function(event) {
+    var moeda_pre;
+    moeda_pre = $('#target_currency').val();
+    $('#target_currency').val($('#source_currency').val());
+    $('#source_currency').val(moeda_pre);
+  });
+
+  $(document).on('click', '.btn-convert-bitcoin', function(event) {
+    if ($("#amount").val() !== '') {
+      invert_coins();
+      if ($("#result_bitcoin").val() !== '') {
+        return calc_bitcoin();
+      }
+    }
+  });
+
+  $(document).on('click', '.btn-convert-bitcoin', function(event) {
+    calc_bitcoin();
+  });
+
+  calc_bitcoin = function() {
+    var url;
+    url = 'https://blockchain.info/tobtc?currency=' + $('#source_currency').val() + '&value=' + $('#amount').val();
+    return $.ajax(url, {
+      type: 'GET',
+      dataType: 'json',
+      error: function(jqXHR, textStatus, errorThrown) {
+        return alert(textStatus);
+      },
+      success: function(data, text, jqXHR) {
+        return $('#result_bitcoin').val(data);
+      }
+    });
+  };
+
+  invert_coins = function() {
+    return $.ajax('/convert', {
+      type: 'GET',
+      dataType: 'json',
+      data: {
+        source_currency: $("#source_currency").val(),
+        target_currency: $("#target_currency").val(),
+        amount: $("#amount").val()
+      },
+      error: function(jqXHR, textStatus, errorThrown) {
+        return alert(textStatus);
+      },
+      success: function(data, text, jqXHR) {
+        return $('#result').val(data.value);
+      }
+    });
+  };
+
+}).call(this);
+:ET
